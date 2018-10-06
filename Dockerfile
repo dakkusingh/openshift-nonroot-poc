@@ -3,6 +3,7 @@ FROM wodby/drupal-php:7.2
 USER root
 
 ### Setup user for build execution and application runtime
+# See https://github.com/GrahamDumpleton/docker-solr/commit/a0592c58947ff2f0c5975099dc3ff9058fe91ef6
 ENV APP_ROOT=/usr/local \
     HOME=/home/wodby \
     WODBY_USER="wodby" \
@@ -12,10 +13,12 @@ ENV APP_ROOT=/usr/local \
 
 # See
 # https://github.com/RHsyseng/container-rhel-examples/blob/master/starter-arbitrary-uid/Dockerfile#L43
+# https://github.com/GrahamDumpleton/docker-solr/commit/a0592c58947ff2f0c5975099dc3ff9058fe91ef6
 COPY bin/ ${APP_ROOT}/bin/
 
 # See:
 # https://github.com/RHsyseng/container-rhel-examples/blob/master/starter-arbitrary-uid/Dockerfile#L44
+# https://github.com/GrahamDumpleton/docker-solr/commit/a0592c58947ff2f0c5975099dc3ff9058fe91ef6
 RUN chmod -R a+x ${APP_ROOT}/bin/uid_entrypoint && \
     chgrp -R 0 ${APP_ROOT} && \
     chmod -R g=u ${APP_ROOT} /etc/passwd
@@ -33,6 +36,7 @@ USER 1000
 ### user name recognition at runtime w/ an arbitrary uid - for OpenShift deployments
 # See:
 # https://github.com/RHsyseng/container-rhel-examples/blob/master/starter-arbitrary-uid/bin/uid_entrypoint
+# https://github.com/GrahamDumpleton/docker-solr/commit/a0592c58947ff2f0c5975099dc3ff9058fe91ef6
 # Swap entrypoint for CMD?
 ENTRYPOINT [ "uid_entrypoint" ]
 CMD [ "php-fpm" ]
