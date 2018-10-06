@@ -1,7 +1,12 @@
-#!/bin/sh
-if ! whoami &> /dev/null; then
-  if [ -w /etc/passwd ]; then
-    echo "${USER_NAME:-default}:x:$(id -u):0:${USER_NAME:-default} user:${HOME}:/sbin/nologin" >> /etc/passwd
-  fi
+#!/bin/bash
+
+# add entry to passwd file to match what OpenShift is being run as
+if [ $(id -u) != 0 -a $(id -u) != $WODBY_UID ]; then
+    cat /etc/passwd | sed -e "s/^.*:x:$WODBY_UID:0:/$WODBY_USER-build:x:$WODBY_UID:0:/" > /tmp/passwd
+    echo "$WODBY_USER:x:$(id -u):0:$WODBY_USER,,,:$HOME:/bin/bash" >> /tmp/passwd
+    cat /tmp/passwd > /etc/passwd
+    rm /tmp/passwd
 fi
+
+# execute command passed in as arguments.
 exec "$@"
