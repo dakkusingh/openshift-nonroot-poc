@@ -25,7 +25,7 @@ RUN chmod -R a+x ${APP_ROOT}/bin/uid_entrypoint && \
 
 # Reset permissions of modified directories and add default user
 # RUN adduser -D 1000 -S -s /bin/bash  
-RUN adduser -D $WODBY_UID -S -s /bin/bash
+# RUN adduser -D $WODBY_UID -S -s /bin/bash
 
 	# adduser -u "${WODBY_USER_ID}" -D -S -s /bin/bash -G wodby wodby; \
 	# adduser wodby www-data; \  
