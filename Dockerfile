@@ -6,7 +6,8 @@ USER root
 # See https://github.com/GrahamDumpleton/docker-solr/commit/a0592c58947ff2f0c5975099dc3ff9058fe91ef6
 ENV BIN_ROOT=/usr/local \
     HOME=/home/wodby \
-    WODBY_USER="wodby" \
+    HOME_OPENSHIFT=/home/openshift \
+    OPENSHIFT_USER="openshift" \
     WODBY_UID="1000" \
     WODBY_GID="1000"
 
@@ -19,6 +20,7 @@ COPY bin/ ${BIN_ROOT}/bin/
 # https://docs.openshift.com/container-platform/3.10/creating_images/guidelines.html
 # https://github.com/GrahamDumpleton/docker-solr/commit/a0592c58947ff2f0c5975099dc3ff9058fe91ef6
 RUN chmod -R a+x ${BIN_ROOT}/bin/uid_entrypoint; \
+    # Chmod the files so we can add openshift user.
     chmod g=u /etc/passwd; \
     chmod g=u /etc/group; \
     # Add wodby to root group
@@ -27,9 +29,12 @@ RUN chmod -R a+x ${BIN_ROOT}/bin/uid_entrypoint; \
     # may be written to by processes in the image should be owned by the root group and 
     # be read/writable by that group. Files to be executed should also 
     # have group execute permissions.    
-    adduser ${WODBY_USER} root; \
+    # adduser ${WODBY_USER} root; \
     chgrp -R 0 ${APP_ROOT}; \
-    chmod -R g=u ${APP_ROOT}
+    chmod -R g=u ${APP_ROOT}; \
+    # Change home dirs
+    chgrp -R 0 ${HOME}; \
+    chmod -R g=u ${HOME}
 
 ### Containers should NOT run as root as a good practice
 USER 1000
