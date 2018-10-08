@@ -6,6 +6,10 @@ if [ $(id -u) != 0 -a $(id -u) != $WODBY_UID ]; then
     cat /etc/passwd | sed -e "s/^.*:x:$WODBY_UID:$WODBY_GID:/$WODBY_USER:x:$(id -u):$WODBY_GID:/" > /tmp/passwd
     cat /tmp/passwd > /etc/passwd
     rm /tmp/passwd    
+
+    cat /etc/group | sed -e "s/^.*:x:$WODBY_GID:/$WODBY_USER:x:$(id -u):/" > /tmp/group
+    cat /tmp/group > /etc/group
+    rm /tmp/group      
 fi
 
 # execute command passed in as arguments.
